@@ -1,0 +1,15 @@
+*.db
+*.sqlite
+*.log
+*.exe
+*.exe~
+*.dll
+*.so
+
+*.test
+*.out
+.env
+.pgdata
+
+media/
+certs/

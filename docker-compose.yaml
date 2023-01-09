@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  test: &defaults
+    build:
+      context: .
+      target: base
+    working_dir: /app/
+    command: go test -v ./...
+    environment:
+      - ENVIRONMENT=development
+      - PORT=8080
+      - CGO_ENABLED=00
+      - GOOS=linux
+    volumes:
+      - .:/app/
+      - go_packages:/go
+  http:
+    <<: *defaults
+    command: go run main.go http
+    ports:
+      - 8080:8080
+  ci:
+    <<: *defaults
+    build:
+      context: .
+      target: ci
+    volumes: []
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: medias
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306
+
+volumes:
+  go_packages: {}
